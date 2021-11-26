@@ -1,15 +1,33 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import './contact.css'
 import Phone from '../../img/phone.png'
 import Email from '../../img/email.png'
 import Address from '../../img/address.png'
+import emailjs from 'emailjs-com';
 
 const Contact = () => {
 
     const formRef = useRef();
+    const [done, setDone] = useState(false)
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        emailjs
+        .sendForm(
+            "service_bwe5oxm",
+            "template_ksbclab",
+            formRef.current,
+            "user_ZoVIwNkwAvWblayFIozva"
+        )
+        .then(
+            (result) => {
+            console.log(result.text);
+            setDone(true)
+            },
+            (error) => {
+            console.log(error.text);
+            }
+        );
     };
 
     return (
@@ -44,6 +62,7 @@ const Contact = () => {
                             <input type="text" placeholder="Email" name="user_email" />
                             <textarea rows="5" placeholder="Message" name="message" />
                             <button>Submit</button>
+                            {done && "Thank you..."}
                         </form>
                     </div>
                 </div>
